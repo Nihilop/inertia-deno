@@ -39,6 +39,6 @@ jobs:
         with:
           project: "inertia-deno-docs"
           entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
-          root: "dist"
+          root: "docs/dist"
           
           
