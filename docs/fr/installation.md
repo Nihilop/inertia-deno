@@ -146,4 +146,4 @@ deno check server.ts      # type-check du serveur
 deno task dev             # démarre Vite + serveur Deno
 ```
 
-→ Voir [Démarrage rapide](./demarrage-rapide.md) pour la suite.
+→ Voir [Démarrage rapide](./quick-start.md) pour la suite.

@@ -1,0 +1,1 @@
+import{_ as i,o as a,c as t,ag as n}from"./chunks/framework.BZohXCq9.js";const o=JSON.parse('{"title":"Props","description":"","frontmatter":{},"headers":[],"relativePath":"en/props.md","filePath":"en/props.md"}'),e={name:"en/props.md"};function p(h,s,l,k,r,d){return a(),t("div",null,[...s[0]||(s[0]=[n("",57)])])}const g=i(e,[["render",p]]);export{o as __pageData,g as default};

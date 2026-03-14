@@ -11,11 +11,11 @@ avec n'importe quel framework ou router compatible (Hono, Oak, std/http, etc.).
 | Page | Description |
 |------|-------------|
 | [Installation](./installation.md) | Prérequis, deno.json, npm |
-| [Démarrage rapide](./demarrage-rapide.md) | Projet fonctionnel en 5 minutes |
+| [Démarrage rapide](./quick-start.md) | Projet fonctionnel en 5 minutes |
 | [Configuration](./configuration.md) | `InertiaConfig` — tous les champs |
-| [Rendu](./rendu.md) | `render()`, `renderWithErrors()`, `redirect()` |
+| [Rendu](./rendering.md) | `render()`, `renderWithErrors()`, `redirect()` |
 | [Props](./props.md) | normal, shared, always, lazy, defer, merge |
-| [Formulaires & validation](./formulaires.md) | Erreurs, error bags, cycle POST |
+| [Formulaires & validation](./forms.md) | Erreurs, error bags, cycle POST |
 | [Flash messages](./flash.md) | Cookie `__flash`, auto-clear |
 | [Router](./router.md) | `createRouter()`, params, middleware, groupes |
 | [Vite](./vite.md) | Intégration dev + production |
