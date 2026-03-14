@@ -104,28 +104,33 @@ export function viteProdAssets(
 
   const tags: string[] = []
 
+  // Les chemins dans le manifest Vite sont relatifs au dist root (ex: "assets/main.js").
+  // On retire le segment "assets/" initial pour éviter de le doubler avec normalizedBase.
+  const toUrl = (file: string) =>
+    `${normalizedBase}${file.replace(/^assets\//, "")}`
+
   // Preload des chunks JS importés
   for (const imp of jsChunks) {
     const impChunk = manifest[imp]
     if (impChunk) {
-      tags.push(`<link rel="modulepreload" href="${normalizedBase}${impChunk.file}">`)
+      tags.push(`<link rel="modulepreload" href="${toUrl(impChunk.file)}">`)
     }
   }
 
   // Feuilles CSS
   for (const css of cssFiles) {
-    tags.push(`<link rel="stylesheet" href="${normalizedBase}${css}">`)
+    tags.push(`<link rel="stylesheet" href="${toUrl(css)}">`)
   }
 
   // CSS du chunk d'entrée (après les chunks importés)
   for (const css of chunk.css ?? []) {
     if (!cssFiles.has(css)) {
-      tags.push(`<link rel="stylesheet" href="${normalizedBase}${css}">`)
+      tags.push(`<link rel="stylesheet" href="${toUrl(css)}">`)
     }
   }
 
   // JS principal
-  tags.push(`<script type="module" src="${normalizedBase}${chunk.file}"></script>`)
+  tags.push(`<script type="module" src="${toUrl(chunk.file)}"></script>`)
 
   return tags.join("\n    ")
 }

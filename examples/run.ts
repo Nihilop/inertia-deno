@@ -85,9 +85,11 @@ if (isProd) {
   serverEnv.ASSETS_BASE   = `/assets/`
 }
 
-// ---- Spawn serveur Deno avec watch ----
+// ---- Spawn serveur Deno (watch en dev seulement) ----
+const useWatch = !isProd
+const serverArgs = ["run", "-A", ...(useWatch ? ["--watch"] : []), `${router}/server.ts`]
 const serverProc = new Deno.Command("deno", {
-  args: ["run", "-A", "--watch", `${router}/server.ts`],
+  args: serverArgs,
   cwd,
   env: serverEnv,
   stdout: "inherit",

@@ -23,7 +23,14 @@
     "preview:hono:vue":   "deno run -A run.ts --router=hono --frontend=vue  --mode=prod",
     "preview:hono:react": "deno run -A run.ts --router=hono --frontend=react --mode=prod",
     "preview:std:vue":    "deno run -A run.ts --router=std  --frontend=vue  --mode=prod",
-    "preview:std:react":  "deno run -A run.ts --router=std  --frontend=react --mode=prod"
+    "preview:std:react":  "deno run -A run.ts --router=std  --frontend=react --mode=prod",
+
+    "start:hono:vue":     "deno run -A run.ts --router=hono --frontend=vue  --mode=prod",
+    "start:hono:react":   "deno run -A run.ts --router=hono --frontend=react --mode=prod",
+    "start:oak:vue":      "deno run -A run.ts --router=oak  --frontend=vue  --mode=prod",
+    "start:oak:react":    "deno run -A run.ts --router=oak  --frontend=react --mode=prod",
+    "start:std:vue":      "deno run -A run.ts --router=std  --frontend=vue  --mode=prod",
+    "start:std:react":    "deno run -A run.ts --router=std  --frontend=react --mode=prod"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

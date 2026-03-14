@@ -113,29 +113,46 @@ export function serverTs({ router, frontend }: TemplateOptions): string {
   // ---- imports par router ----
   const imports: Record<Router, string> = {
     hono: `import { Hono } from "hono"
-import { createInertia, pageToDiv, readViteManifest } from "deno-inertia"
+import { createInertia, pageToDiv, readViteManifest, serveStaticAsset } from "deno-inertia"
 import { toWebRequest } from "deno-inertia/hono"`,
 
     oak: `import { Application, Router } from "@oak/oak"
-import { createInertia, pageToDiv, readViteManifest } from "deno-inertia"
+import { createInertia, pageToDiv, readViteManifest, serveStaticAsset } from "deno-inertia"
 import { toWebRequest, applyResponse } from "deno-inertia/oak"`,
 
-    std: `import { createInertia, createRouter, pageToDiv, readViteManifest } from "deno-inertia"`,
+    std: `import { createInertia, createRouter, pageToDiv, readViteManifest, serveStaticAsset } from "deno-inertia"`,
   }
 
   // ---- corps du serveur par router ----
   const body: Record<Router, string> = {
     hono: `const app = new Hono()
 
-app.get("/", async (c) =>
+if (IS_PROD) {
+  app.get("/assets/*", async (c) => {
+    const res = await serveStaticAsset(c.req.raw, "dist")
+    return res ?? c.notFound()
+  })
+}
+
+app.get("/", (c) =>
   inertia.render(toWebRequest(c), "Home", { message: "Hello depuis Hono 🔥" }),
 )
 
-Deno.serve({ port: PORT }, app.fetch)
-console.log(\`🔥 http://localhost:\${PORT}\`)`,
+console.log(\`🔥 http://localhost:\${PORT}\`)
+Deno.serve({ port: PORT }, app.fetch)`,
 
     oak: `const app    = new Application()
 const router = new Router()
+
+if (IS_PROD) {
+  app.use(async (ctx, next) => {
+    if (ctx.request.url.pathname.startsWith("/assets/")) {
+      const res = await serveStaticAsset(toWebRequest(ctx), "dist")
+      if (res) { await applyResponse(ctx, res); return }
+    }
+    await next()
+  })
+}
 
 router.get("/", async (ctx) =>
   applyResponse(ctx, await inertia.render(toWebRequest(ctx), "Home", { message: "Hello depuis Oak 🌳" })),
@@ -153,8 +170,16 @@ router.get("/", (req) =>
   inertia.render(req, "Home", { message: "Hello depuis std/http 🦕" }),
 )
 
+async function handler(request: Request): Promise<Response> {
+  if (IS_PROD && new URL(request.url).pathname.startsWith("/assets/")) {
+    const res = await serveStaticAsset(request, "dist")
+    return res ?? new Response("404 Not Found", { status: 404 })
+  }
+  return router.handler(request)
+}
+
 console.log(\`🦕 http://localhost:\${PORT}\`)
-Deno.serve({ port: PORT }, router.handler)`,
+Deno.serve({ port: PORT }, handler)`,
   }
 
   return `${imports[router]}
