@@ -1,0 +1,39 @@
+# @streemkit/inertia-deno
+
+> Inertia.js server-side adapter for Deno. Build server-driven SPAs with Hono, Oak or std/http — no separate API layer needed. Uses only standard Web API primitives (Request, Response, URLPattern). Published on JSR. Supports Inertia v1 and v2.
+
+## Getting Started
+
+- [Introduction](https://inertia-deno-docs.deno.dev/en/): What is inertia-deno, why use it, JSR packages overview
+- [Installation](https://inertia-deno-docs.deno.dev/en/installation): Prerequisites, deno.json import map, npm setup for Vite
+- [Quick Start](https://inertia-deno-docs.deno.dev/en/quick-start): Working Hono + Vue 3 project from scratch in 5 minutes
+
+## Core
+
+- [Configuration](https://inertia-deno-docs.deno.dev/en/configuration): Full InertiaConfig reference — version, shared, always, template, vite, prod, clearFlash, encryptHistory
+- [Rendering](https://inertia-deno-docs.deno.dev/en/rendering): render(), renderWithErrors(), redirect(), pageToDiv() — behavior per request type
+- [Props](https://inertia-deno-docs.deno.dev/en/props): Normal props, shared props, always props, lazy(), defer(), merge() — how each type behaves
+- [Forms & Validation](https://inertia-deno-docs.deno.dev/en/forms): POST/Redirect/GET cycle, ValidationErrors, named error bags, Zod integration
+- [Flash Messages](https://inertia-deno-docs.deno.dev/en/flash): HTTP-only __flash cookie, readFlash(), flashCookie(), clearFlashCookie(), auto-clear
+
+## Infrastructure
+
+- [Router](https://inertia-deno-docs.deno.dev/en/router): createRouter(), URL params, middleware chain, route groups with prefix, 404/405 handling
+- [Vite Integration](https://inertia-deno-docs.deno.dev/en/vite): Dev HMR scripts, production manifest, readViteManifest(), serveStaticAsset(), React preamble
+- [Adapters](https://inertia-deno-docs.deno.dev/en/adapters): Hono adapter (toWebRequest), Oak adapter (toWebRequest + applyResponse), std/http (no adapter needed)
+
+## Advanced
+
+- [Inertia v2](https://inertia-deno-docs.deno.dev/en/inertia-v2): defer() deferred props, merge() merge props, encryptHistory — Inertia v2 specific features
+- [TypeScript](https://inertia-deno-docs.deno.dev/en/typescript): PropValue<T>, PageProps<T>, render<T>() generics, all exported types reference
+
+## CLI
+
+- [CLI Reference](https://inertia-deno-docs.deno.dev/en/cli): inertia init, dev, build, preview, install — scaffold and run projects
+
+## JSR Packages
+
+- `jsr:@streemkit/inertia-deno` — main server library
+- `jsr:@streemkit/inertia-deno/hono` — Hono adapter
+- `jsr:@streemkit/inertia-deno/oak` — Oak adapter
+- `jsr:@streemkit/inertia-deno-cli` — CLI (init, dev, build, preview)

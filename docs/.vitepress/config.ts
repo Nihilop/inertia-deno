@@ -95,9 +95,10 @@ export default defineConfig({
       link: "/en/",
       themeConfig: {
         nav: [
-          { text: "Guide",  link: "/en/" },
-          { text: "JSR",    link: "https://jsr.io/@streemkit/inertia-deno" },
-          { text: "GitHub", link: "https://github.com/Nihilop/inertia-deno" },
+          { text: "Guide",    link: "/en/" },
+          { text: "JSR",      link: "https://jsr.io/@streemkit/inertia-deno" },
+          { text: "GitHub",   link: "https://github.com/Nihilop/inertia-deno" },
+          { text: "llms.txt", link: "/llms.txt" },
         ],
         sidebar: enSidebar,
         editLink: {
@@ -114,9 +115,10 @@ export default defineConfig({
       link: "/fr/",
       themeConfig: {
         nav: [
-          { text: "Guide",  link: "/fr/" },
-          { text: "JSR",    link: "https://jsr.io/@streemkit/inertia-deno" },
-          { text: "GitHub", link: "https://github.com/Nihilop/inertia-deno" },
+          { text: "Guide",    link: "/fr/" },
+          { text: "JSR",      link: "https://jsr.io/@streemkit/inertia-deno" },
+          { text: "GitHub",   link: "https://github.com/Nihilop/inertia-deno" },
+          { text: "llms.txt", link: "/llms.txt" },
         ],
         sidebar: frSidebar,
         editLink: {
