@@ -1,16 +1,47 @@
-name: Publish
+name: Publish to JSR
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  publish:
+  publish-lib:
+    name: Publish @streemkit/inertia-deno
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # OIDC token — requis par JSR pour l'auth sans secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Type-check
+        run: deno check mod.ts
+
+      - name: Publish lib
+        run: deno publish
+
+  publish-cli:
+    name: Publish @streemkit/inertia-deno-cli
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
-      - name: Publish package
-        run: npx jsr publish
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Type-check CLI
+        working-directory: cli
+        run: deno check mod.ts
+
+      - name: Publish CLI
+        working-directory: cli
+        run: deno publish
