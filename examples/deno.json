@@ -1,0 +1,33 @@
+{
+  "nodeModulesDir": "none",
+  "imports": {
+    "hono":               "jsr:@hono/hono@^4",
+    "@oak/oak":           "jsr:@oak/oak@^17",
+    "deno-inertia":       "../mod.ts",
+    "deno-inertia/oak":   "../oak_adapter.ts",
+    "deno-inertia/hono":  "../hono_adapter.ts"
+  },
+  "tasks": {
+    "install": "npm install",
+
+    "dev:hono:vue":     "deno run -A run.ts --router=hono  --frontend=vue",
+    "dev:hono:react":   "deno run -A run.ts --router=hono  --frontend=react",
+    "dev:oak:vue":      "deno run -A run.ts --router=oak   --frontend=vue",
+    "dev:oak:react":    "deno run -A run.ts --router=oak   --frontend=react",
+    "dev:std:vue":      "deno run -A run.ts --router=std   --frontend=vue",
+    "dev:std:react":    "deno run -A run.ts --router=std   --frontend=react",
+
+    "build:vue":        "npx vite build --config vite.vue.config.ts",
+    "build:react":      "npx vite build --config vite.react.config.ts",
+
+    "preview:hono:vue":   "deno run -A run.ts --router=hono --frontend=vue  --mode=prod",
+    "preview:hono:react": "deno run -A run.ts --router=hono --frontend=react --mode=prod",
+    "preview:std:vue":    "deno run -A run.ts --router=std  --frontend=vue  --mode=prod",
+    "preview:std:react":  "deno run -A run.ts --router=std  --frontend=react --mode=prod"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["deno.ns", "dom", "dom.iterable", "esnext"]
+  }
+}

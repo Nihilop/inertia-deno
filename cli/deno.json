@@ -1,0 +1,9 @@
+{
+  "name": "@deno-inertia/cli",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "imports": {
+    "@std/cli": "jsr:@std/cli@^1",
+    "@std/path": "jsr:@std/path@^1"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@deno-inertia/core",
+  "version": "0.1.0",
+  "exports": {
+    ".":      "./mod.ts",
+    "./oak":  "./oak_adapter.ts",
+    "./hono": "./hono_adapter.ts"
+  },
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17",
+    "hono":     "jsr:@hono/hono@^4"
+  },
+  "tasks": {
+    "test": "deno test core.test.ts",
+    "check": "deno check mod.ts"
+  }
+}
