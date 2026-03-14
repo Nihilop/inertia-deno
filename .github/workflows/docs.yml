@@ -11,6 +11,9 @@ jobs:
   deploy-docs:
     name: Build & deploy VitePress → Deno Deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # OIDC — pas besoin de secret DENO_DEPLOY_TOKEN
 
     steps:
       - uses: actions/checkout@v4
@@ -18,12 +21,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: docs/package-lock.json
 
       - name: Install dependencies
         working-directory: docs
-        run: npm ci
+        run: npm install
 
       - name: Build docs
         working-directory: docs
@@ -35,5 +36,3 @@ jobs:
           project: "inertia-deno-docs"   # nom du projet sur dash.deno.com
           entrypoint: "serve.ts"
           root: "docs"
-        env:
-          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
