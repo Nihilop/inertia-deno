@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "*.ts"           # lib root (mod.ts, core.ts, types.ts…)
+      - "deno.json"
+      - "cli/**"
 
 jobs:
   publish-lib:
@@ -11,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write   # OIDC token — requis par JSR pour l'auth sans secret
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
