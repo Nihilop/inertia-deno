@@ -6,3 +6,12 @@ notes.md
 deno.lock
 cli/deno.lock
 test
+
+# docs (VitePress)
+docs/node_modules
+docs/.vitepress/dist
+docs/.vitepress/cache
+
+# examples
+examples/node_modules
+examples/dist
