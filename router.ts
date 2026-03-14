@@ -52,6 +52,21 @@ export type MiddlewareFn = (
 ) => Response | Promise<Response>
 
 /**
+ * Instance retournée par `createRouter()`.
+ * Type de retour explicite requis par JSR (no slow types).
+ */
+export interface InertiaRouter {
+  get(path: string, handler: RouteHandler): void
+  post(path: string, handler: RouteHandler): void
+  put(path: string, handler: RouteHandler): void
+  patch(path: string, handler: RouteHandler): void
+  delete(path: string, handler: RouteHandler): void
+  use(fn: MiddlewareFn): void
+  group(prefix: string, fn: (r: RouterGroup) => void): void
+  handler(request: Request): Promise<Response>
+}
+
+/**
  * Interface d'un groupe de routes (sous-routeur préfixé).
  * Passé au callback de router.group().
  */
@@ -98,7 +113,7 @@ function compilePattern(path: string): { pattern: URLPattern; paramNames: string
 // Router factory
 // ---------------------------------------------------------------------------
 
-export function createRouter() {
+export function createRouter(): InertiaRouter {
   const routes: Route[] = []
   const middlewares: MiddlewareFn[] = []
 

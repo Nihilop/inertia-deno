@@ -8,6 +8,7 @@ export { merge, MergedProp } from "./merge.ts"
 export type {
   PageData,
   InertiaConfig,
+  InertiaInstance,
   ViteDevConfig,
   ViteProdConfig,
   ViteManifest,
@@ -19,4 +20,4 @@ export type {
   PageProps,
 } from "./types.ts"
 export type { FlashMessage } from "./flash.ts"
-export type { RouteHandler, RouteParams, MiddlewareFn, RouterGroup } from "./router.ts"
+export type { RouteHandler, RouteParams, MiddlewareFn, RouterGroup, InertiaRouter } from "./router.ts"

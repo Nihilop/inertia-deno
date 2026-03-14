@@ -140,6 +140,31 @@ export type PageProps<T extends Record<string, unknown>> = {
   [K in keyof T]: PropValue<NonNullable<T[K]>>
 }
 
+/**
+ * Instance retournée par `createInertia()`.
+ * Type de retour explicite requis par JSR (no slow types).
+ */
+export interface InertiaInstance {
+  render<T extends Record<string, unknown> = Record<string, unknown>>(
+    request: Request,
+    component: string,
+    props?: PageProps<T>,
+    responseInit?: ResponseInit,
+  ): Promise<Response>
+
+  renderWithErrors<T extends Record<string, unknown> = Record<string, unknown>>(
+    request: Request,
+    component: string,
+    props: PageProps<T>,
+    errors: ValidationErrors,
+    errorBag?: string,
+  ): Promise<Response>
+
+  redirect(url: string, headers?: Record<string, string>): Response
+
+  pageToDiv(page: PageData): string
+}
+
 export interface ManifestChunk {
   file: string
   src?: string

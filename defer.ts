@@ -40,6 +40,7 @@ export class DeferredProp<T = unknown> {
  * @param group - Groupe de chargement (défaut: "default")
  */
 export function defer<T>(fn: () => T | Promise<T>, group = "default"): DeferredProp<T> {
+  if (!group.trim()) throw new Error('[deno-inertia] defer() group cannot be an empty string. Use the default ("default") or a non-empty name.')
   return new DeferredProp(fn, group)
 }
 

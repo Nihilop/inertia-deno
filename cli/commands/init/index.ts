@@ -23,9 +23,16 @@ export async function init(nameArg?: string): Promise<void> {
 `)
 
   // ---- Questions ----
-  const name = (nameArg ?? await input("Nom du projet", "my-inertia-app"))
+  let name = (nameArg ?? await input("Nom du projet", "my-inertia-app"))
+    .trim()
     .replace(/\s+/g, "-")
     .toLowerCase()
+
+  // Valider : lettres minuscules, chiffres, tirets uniquement (compatible npm + dossier)
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
+    console.error(`\n❌ Nom invalide : "${name}"\n   Utilisez uniquement des lettres minuscules, chiffres et tirets (ex: my-app)\n`)
+    Deno.exit(1)
+  }
 
   const frontend = await select<Frontend>("Frontend", [
     { label: "Vue 3   (Composition API + SFC)", value: "vue" },
@@ -43,11 +50,16 @@ export async function init(nameArg?: string): Promise<void> {
   // ---- Création du répertoire ----
   const dir = join(Deno.cwd(), name)
 
+  // Vérifier si le dossier existe déjà
   try {
-    await Deno.mkdir(join(dir, "src", "pages"), { recursive: true })
+    await Deno.stat(dir)
+    console.error(`\n❌ Le dossier "${name}" existe déjà.\n   Supprimez-le ou choisissez un autre nom.\n`)
+    Deno.exit(1)
   } catch (e) {
-    if (!(e instanceof Deno.errors.AlreadyExists)) throw e
+    if (!(e instanceof Deno.errors.NotFound)) throw e
   }
+
+  await Deno.mkdir(join(dir, "src", "pages"), { recursive: true })
 
   // ---- Fichiers à générer ----
   const files: Record<string, string> = {
