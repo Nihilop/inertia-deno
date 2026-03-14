@@ -1,6 +1,8 @@
 CLAUDE.md
 ROADMAP.md
+notes.md
 .claude
 .idea
 deno.lock
 cli/deno.lock
+test

@@ -25,10 +25,10 @@ export async function dev(args: DevArgs): Promise<void> {
 
   console.log(`
 ╔══════════════════════════════════════╗
-║   deno-inertia — dev    (${pm.padEnd(4)})      ║
+║   deno-inertia — dev    (${pm.padEnd(4)})       ║
 ╠══════════════════════════════════════╣
-║  Serveur : http://localhost:${port.padEnd(5)}    ║
-║  Vite    : http://localhost:${vitePort.padEnd(5)}    ║
+║  Serveur : http://localhost:${port.padEnd(5)}    
+║  Vite    : http://localhost:${vitePort.padEnd(5)}    
 ╚══════════════════════════════════════╝
 `)
 

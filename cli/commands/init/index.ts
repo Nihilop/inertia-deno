@@ -18,7 +18,7 @@ import {
 export async function init(nameArg?: string): Promise<void> {
   console.log(`
 ╔══════════════════════════════════════╗
-║   deno-inertia — Nouveau projet 🦕   ║
+║   deno-inertia — Nouveau projet 🦕    ║
 ╚══════════════════════════════════════╝
 `)
 
