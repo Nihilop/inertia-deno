@@ -2,6 +2,12 @@ import type { LazyProp } from "./lazy.ts"
 import type { DeferredProp } from "./defer.ts"
 import type { MergedProp } from "./merge.ts"
 
+/**
+ * Données de page envoyées au client Inertia — dans le `data-page` div (premier rendu)
+ * ou dans le corps JSON des requêtes SPA suivantes.
+ *
+ * Ne pas construire manuellement : utilisez `inertia.render()` ou `inertia.pageToDiv()`.
+ */
 export interface PageData {
   component: string
   props: Record<string, unknown>
@@ -29,6 +35,7 @@ export interface PageData {
   encryptHistory?: boolean
 }
 
+/** Configuration Vite pour le mode développement (HMR). Mutuellement exclusif avec `prod`. */
 export interface ViteDevConfig {
   /** URL du serveur Vite en dev — défaut: "http://localhost:5173" */
   url?: string
@@ -42,6 +49,7 @@ export interface ViteDevConfig {
   react?: boolean
 }
 
+/** Configuration Vite pour le mode production (manifest). Mutuellement exclusif avec `vite`. */
 export interface ViteProdConfig {
   /** Manifest Vite parsé via readViteManifest(). Chargé au démarrage. */
   manifest: ViteManifest
@@ -165,11 +173,22 @@ export interface InertiaInstance {
   pageToDiv(page: PageData): string
 }
 
+/**
+ * Entrée dans le manifest Vite (`.vite/manifest.json`).
+ * Décrit un chunk produit par `vite build` — fichier haché, CSS associés, imports.
+ */
 export interface ManifestChunk {
+  /** Nom de fichier haché — ex: "assets/main-Bx1Q3.js" */
   file: string
+  /** Fichier source d'origine — présent uniquement pour les entrypoints */
   src?: string
+  /** Fichiers CSS produits par ce chunk */
   css?: string[]
+  /** Chunks importés par ce chunk */
   imports?: string[]
+  /** true si c'est un entrypoint Vite */
   isEntry?: boolean
 }
+
+/** Manifest Vite complet — clé = chemin source relatif (ex: "src/main.ts") */
 export type ViteManifest = Record<string, ManifestChunk>

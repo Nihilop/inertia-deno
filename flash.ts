@@ -15,6 +15,7 @@
  *   return redirect("/form", { "Set-Cookie": flashCookie({ success: "Envoyé !" }) })
  */
 
+/** Message flash à transmettre via cookie après une redirection POST → GET. */
 export interface FlashMessage {
   success?: string
   error?: string

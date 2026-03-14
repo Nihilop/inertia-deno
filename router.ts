@@ -26,8 +26,16 @@
  *   Deno.serve(router.handler)
  */
 
+/** Paramètres extraits de l'URL — ex: `/users/:id` → `{ id: "42" }` */
 export type RouteParams = Record<string, string>
 
+/**
+ * Gestionnaire de route.
+ * Reçoit la requête et les paramètres extraits du pattern, retourne une Response.
+ *
+ * @example
+ *   router.get("/users/:id", (req, params) => Response.json({ id: params.id }))
+ */
 export type RouteHandler = (
   request: Request,
   params: RouteParams,
