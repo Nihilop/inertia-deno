@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write   # OIDC — pas besoin de secret DENO_DEPLOY_TOKEN
 
     steps:
       - uses: actions/checkout@v4
@@ -36,3 +35,5 @@ jobs:
           project: "inertia-deno-docs"   # nom du projet sur dash.deno.com
           entrypoint: "serve.ts"
           root: "docs"
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
