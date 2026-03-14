@@ -126,9 +126,11 @@ async function resolvePageProps(
 // ---------------------------------------------------------------------------
 
 function appendFlashClear(headers: Headers, request: Request, config: InertiaConfig): void {
-  if (config.clearFlash && request.headers.get("Cookie")?.includes("__flash=")) {
-    headers.append("Set-Cookie", clearFlashCookie())
-  }
+  if (!config.clearFlash) return
+  const hasCookie = request.headers.get("Cookie")
+    ?.split(";")
+    .some((c) => c.trim().startsWith("__flash="))
+  if (hasCookie) headers.append("Set-Cookie", clearFlashCookie())
 }
 
 // ---------------------------------------------------------------------------

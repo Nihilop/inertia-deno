@@ -1,6 +1,6 @@
-# CLI — `@deno-inertia/cli`
+# CLI — `@streemkit/inertia-deno-cli`
 
-`@deno-inertia/cli` est un outil en ligne de commande pour créer et gérer
+`@streemkit/inertia-deno-cli` est un outil en ligne de commande pour créer et gérer
 des projets deno-inertia.
 
 ---
@@ -12,13 +12,13 @@ des projets deno-inertia.
 Via `deno run`, directement depuis JSR :
 
 ```bash
-deno run -A jsr:@deno-inertia/cli init mon-app
+deno run -A jsr:@streemkit/inertia-deno-cli init mon-app
 ```
 
 ### Installation globale
 
 ```bash
-deno install -g -A jsr:@deno-inertia/cli -n inertia
+deno install -g -A jsr:@streemkit/inertia-deno-cli -n inertia
 ```
 
 Puis :
@@ -36,10 +36,10 @@ inertia preview
 // deno.json
 {
   "tasks": {
-    "install": "deno run -A jsr:@deno-inertia/cli install",
-    "dev":     "deno run -A jsr:@deno-inertia/cli dev",
-    "build":   "deno run -A jsr:@deno-inertia/cli build",
-    "preview": "deno run -A jsr:@deno-inertia/cli preview"
+    "install": "deno run -A jsr:@streemkit/inertia-deno-cli install",
+    "dev":     "deno run -A jsr:@streemkit/inertia-deno-cli dev",
+    "build":   "deno run -A jsr:@streemkit/inertia-deno-cli build",
+    "preview": "deno run -A jsr:@streemkit/inertia-deno-cli preview"
   }
 }
 ```
@@ -53,7 +53,7 @@ Wizard interactif qui génère un projet complet.
 ```bash
 inertia init [nom]
 # ou
-deno run -A jsr:@deno-inertia/cli init [nom]
+deno run -A jsr:@streemkit/inertia-deno-cli init [nom]
 ```
 
 ### Questions posées
@@ -213,7 +213,7 @@ inertia -v          # alias --version
 
 ```bash
 # 1. Créer un projet
-deno run -A jsr:@deno-inertia/cli init mon-app
+deno run -A jsr:@streemkit/inertia-deno-cli init mon-app
 cd mon-app
 
 # 2. Installer les dépendances npm

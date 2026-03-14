@@ -88,6 +88,6 @@ export async function init(nameArg?: string): Promise<void> {
   deno task build       # compile ${devEntry} → dist/
   deno task preview     # serveur prod sans Vite
 
-Docs : https://jsr.io/@deno-inertia/core
+Docs : https://jsr.io/@streemkit/inertia-deno
 `)
 }

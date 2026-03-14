@@ -19,7 +19,7 @@
  *   app.get("/", (c) => inertia.render(toWebRequest(c), "Home", { ... }))
  *
  * Import séparé pour ne pas forcer Hono comme dépendance :
- *   import { toWebRequest } from "jsr:@deno-inertia/core/hono"
+ *   import { toWebRequest } from "jsr:@streemkit/inertia-deno/hono"
  */
 import type { Context } from "hono"
 

@@ -1,13 +1,13 @@
 /**
- * @deno-inertia/cli — CLI pour deno-inertia
+ * @streemkit/inertia-deno-cli — CLI pour @streemkit/inertia-deno
  *
  * Usage global :
- *   deno install -g -A jsr:@deno-inertia/cli -n inertia
+ *   deno install -g -A jsr:@streemkit/inertia-deno-cli -n inertia
  *   inertia init mon-projet
  *   inertia dev
  *
  * Usage via deno task (sans install global) :
- *   # deno.json → "dev": "deno run -A jsr:@deno-inertia/cli dev"
+ *   # deno.json → "dev": "deno run -A jsr:@streemkit/inertia-deno-cli dev"
  *   deno task dev
  */
 
@@ -19,11 +19,11 @@ import { init }    from "./commands/init/index.ts"
 import { detectPM, installCmd } from "./pm.ts"
 
 const HELP = `
-deno-inertia — CLI pour @deno-inertia/core
+deno-inertia — CLI pour @streemkit/inertia-deno
 
 Usage:
   inertia <commande> [options]
-  deno run -A jsr:@deno-inertia/cli <commande> [options]
+  deno run -A jsr:@streemkit/inertia-deno-cli <commande> [options]
 
 Commandes:
   init [nom]   Créer un nouveau projet (wizard interactif)
@@ -61,7 +61,7 @@ const args = parseArgs(Deno.args, {
 })
 
 if (args.version) {
-  console.log("@deno-inertia/cli 0.1.0")
+  console.log("@streemkit/inertia-deno-cli 0.1.0")
   Deno.exit(0)
 }
 

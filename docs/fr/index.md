@@ -1,6 +1,6 @@
 # deno-inertia — Documentation
 
-**`@deno-inertia/core`** est un adaptateur serveur [Inertia.js](https://inertiajs.com) pour Deno.
+**`@streemkit/inertia-deno`** est un adaptateur serveur [Inertia.js](https://inertiajs.com) pour Deno.
 Il utilise exclusivement les API Web standard (`Request`, `Response`, `URLPattern`) et s'intègre
 avec n'importe quel framework ou router compatible (Hono, Oak, std/http, etc.).
 
@@ -22,7 +22,7 @@ avec n'importe quel framework ou router compatible (Hono, Oak, std/http, etc.).
 | [Adapters](./adapters.md) | Hono, Oak, std/http |
 | [Inertia v2](./inertia-v2.md) | Deferred, merge, encryptHistory |
 | [TypeScript](./typescript.md) | `PropValue<T>`, `PageProps<T>`, tous les types |
-| [CLI](./cli.md) | `@deno-inertia/cli` — init, dev, build, preview |
+| [CLI](./cli.md) | `@streemkit/inertia-deno-cli` — init, dev, build, preview |
 
 ---
 
@@ -56,7 +56,7 @@ Navigateur ──[ GET /about  X-Inertia:true ]──► Deno
 
 | Package | Rôle |
 |---|---|
-| `jsr:@deno-inertia/core` | Bibliothèque serveur principale |
-| `jsr:@deno-inertia/core/hono` | Adapter Hono (`toWebRequest`) |
-| `jsr:@deno-inertia/core/oak` | Adapter Oak (`toWebRequest` + `applyResponse`) |
-| `jsr:@deno-inertia/cli` | CLI (init, dev, build, preview) |
+| `jsr:@streemkit/inertia-deno` | Bibliothèque serveur principale |
+| `jsr:@streemkit/inertia-deno/hono` | Adapter Hono (`toWebRequest`) |
+| `jsr:@streemkit/inertia-deno/oak` | Adapter Oak (`toWebRequest` + `applyResponse`) |
+| `jsr:@streemkit/inertia-deno-cli` | CLI (init, dev, build, preview) |

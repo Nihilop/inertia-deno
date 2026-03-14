@@ -3,7 +3,7 @@
  * deno-inertia ne dépend que du Web API — Oak a son propre wrapper.
  *
  * Import séparé pour ne pas forcer Oak comme dépendance pour tous :
- *   import { toWebRequest, applyResponse } from "jsr:@deno-inertia/core/oak"
+ *   import { toWebRequest, applyResponse } from "jsr:@streemkit/inertia-deno/oak"
  */
 import type { Context } from "@oak/oak"
 

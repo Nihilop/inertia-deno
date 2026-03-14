@@ -7,7 +7,7 @@
 | [Deno](https://deno.land) | 2.x | Server runtime |
 | [Node.js](https://nodejs.org) | 18+ | Required for Vite (npm/npx) |
 
-> **Tip** — The `@deno-inertia/cli` handles all of this automatically.
+> **Tip** — The `@streemkit/inertia-deno-cli` handles all of this automatically.
 > See [CLI → init](./cli.md) to create a project with one command.
 
 ---
@@ -16,13 +16,13 @@
 
 ### 1. `deno.json`
 
-Add `@deno-inertia/core` to your project imports:
+Add `@streemkit/inertia-deno` to your project imports:
 
 ```jsonc
 // deno.json
 {
   "imports": {
-    "deno-inertia": "jsr:@deno-inertia/core"
+    "deno-inertia": "jsr:@streemkit/inertia-deno"
   }
 }
 ```
@@ -33,8 +33,8 @@ With your router of choice:
 // Hono
 {
   "imports": {
-    "deno-inertia":      "jsr:@deno-inertia/core",
-    "deno-inertia/hono": "jsr:@deno-inertia/core/hono",
+    "deno-inertia":      "jsr:@streemkit/inertia-deno",
+    "deno-inertia/hono": "jsr:@streemkit/inertia-deno/hono",
     "hono":              "jsr:@hono/hono@^4"
   }
 }
@@ -44,8 +44,8 @@ With your router of choice:
 // Oak
 {
   "imports": {
-    "deno-inertia":     "jsr:@deno-inertia/core",
-    "deno-inertia/oak": "jsr:@deno-inertia/core/oak",
+    "deno-inertia":     "jsr:@streemkit/inertia-deno",
+    "deno-inertia/oak": "jsr:@streemkit/inertia-deno/oak",
     "@oak/oak":         "jsr:@oak/oak@^17"
   }
 }

@@ -171,7 +171,13 @@ export function createRouter() {
           const groups = match.pathname.groups ?? {}
           const params: RouteParams = {}
           for (const name of route.paramNames) {
-            params[name] = decodeURIComponent(groups[name] ?? "")
+            const raw = groups[name] ?? ""
+            try {
+              params[name] = decodeURIComponent(raw)
+            } catch {
+              // Invalid percent-encoding → retourne le segment brut plutôt que de crasher
+              params[name] = raw
+            }
           }
 
           return await route.handler(request, params)

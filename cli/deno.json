@@ -1,5 +1,5 @@
 {
-  "name": "@deno-inertia/cli",
+  "name": "@streemkit/inertia-deno-cli",
   "version": "0.1.0",
   "exports": "./mod.ts",
   "imports": {

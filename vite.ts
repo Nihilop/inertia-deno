@@ -77,8 +77,12 @@ export function viteProdAssets(
   const chunk = manifest[key]
 
   if (!chunk) {
-    console.warn(`[deno-inertia] Entry "${key}" introuvable dans le manifest Vite.`)
-    return ""
+    throw new Error(
+      `[deno-inertia] Entry "${key}" introuvable dans le manifest Vite.\n` +
+      `Vérifiez que "entry" dans InertiaConfig.prod correspond à la clé du manifest ` +
+      `(ex: "src/main.ts" sans slash initial).\n` +
+      `Clés disponibles : ${Object.keys(manifest).join(", ")}`
+    )
   }
 
   const cssFiles  = new Set<string>()
@@ -152,7 +156,13 @@ export async function serveStaticAsset(
   if (!pathname.startsWith(normalizedBase)) return null
 
   const relativePath = pathname.slice(normalizedBase.length)
-  const filePath     = `${distDir.replace(/\/$/, "")}/assets/${relativePath}`
+
+  // Reject path traversal — Vite assets are content-hashed, no ".." is ever legitimate
+  if (relativePath.includes("..")) {
+    return new Response("403 Forbidden", { status: 403 })
+  }
+
+  const filePath = `${distDir.replace(/\/$/, "")}/assets/${relativePath}`
 
   try {
     const file = await Deno.readFile(filePath)
@@ -169,14 +179,20 @@ export async function serveStaticAsset(
 }
 
 function guessMime(path: string): string {
-  if (path.endsWith(".js"))   return "application/javascript"
-  if (path.endsWith(".mjs"))  return "application/javascript"
-  if (path.endsWith(".css"))  return "text/css"
-  if (path.endsWith(".svg"))  return "image/svg+xml"
-  if (path.endsWith(".png"))  return "image/png"
+  if (path.endsWith(".js"))            return "application/javascript"
+  if (path.endsWith(".mjs"))           return "application/javascript"
+  if (path.endsWith(".css"))           return "text/css"
+  if (path.endsWith(".svg"))           return "image/svg+xml"
+  if (path.endsWith(".png"))           return "image/png"
   if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg"
-  if (path.endsWith(".woff2")) return "font/woff2"
-  if (path.endsWith(".woff"))  return "font/woff"
-  if (path.endsWith(".ico"))   return "image/x-icon"
+  if (path.endsWith(".webp"))          return "image/webp"
+  if (path.endsWith(".gif"))           return "image/gif"
+  if (path.endsWith(".avif"))          return "image/avif"
+  if (path.endsWith(".woff2"))         return "font/woff2"
+  if (path.endsWith(".woff"))          return "font/woff"
+  if (path.endsWith(".ttf"))           return "font/ttf"
+  if (path.endsWith(".ico"))           return "image/x-icon"
+  if (path.endsWith(".json"))          return "application/json"
+  if (path.endsWith(".txt"))           return "text/plain"
   return "application/octet-stream"
 }

@@ -13,8 +13,8 @@ export interface TemplateOptions {
 
 export function denoJson({ router, frontend }: TemplateOptions): string {
   const routerImport: Record<Router, string> = {
-    hono: `    "hono":             "jsr:@hono/hono@^4",\n    "deno-inertia/hono": "jsr:@deno-inertia/core/hono"`,
-    oak:  `    "@oak/oak":         "jsr:@oak/oak@^17",\n    "deno-inertia/oak":  "jsr:@deno-inertia/core/oak"`,
+    hono: `    "hono":             "jsr:@hono/hono@^4",\n    "deno-inertia/hono": "jsr:@streemkit/inertia-deno/hono"`,
+    oak:  `    "@oak/oak":         "jsr:@oak/oak@^17",\n    "deno-inertia/oak":  "jsr:@streemkit/inertia-deno/oak"`,
     std:  ``,
   }
 
@@ -26,13 +26,13 @@ export function denoJson({ router, frontend }: TemplateOptions): string {
 
   return `{
   "imports": {
-    "deno-inertia": "jsr:@deno-inertia/core"${extra}
+    "deno-inertia": "jsr:@streemkit/inertia-deno"${extra}
   },
   "tasks": {
-    "install": "deno run -A jsr:@deno-inertia/cli install",
-    "dev":     "deno run -A jsr:@deno-inertia/cli dev",
-    "build":   "deno run -A jsr:@deno-inertia/cli build",
-    "preview": "deno run -A jsr:@deno-inertia/cli preview"
+    "install": "deno run -A jsr:@streemkit/inertia-deno-cli install",
+    "dev":     "deno run -A jsr:@streemkit/inertia-deno-cli dev",
+    "build":   "deno run -A jsr:@streemkit/inertia-deno-cli build",
+    "preview": "deno run -A jsr:@streemkit/inertia-deno-cli preview"
   }${compilerOptions}
 }
 `
@@ -54,8 +54,9 @@ export function packageJson({ name, frontend }: TemplateOptions): string {
     "@inertiajs/react":   "^2.0.0",
     "@vitejs/plugin-react": "^4.0.0"`
 
+  // JSON.stringify évite l'injection si name contient des guillemets
   return `{
-  "name": "${name}",
+  "name": ${JSON.stringify(name)},
   "private": true,
   "devDependencies": {
     "vite":       "^6.0.0",

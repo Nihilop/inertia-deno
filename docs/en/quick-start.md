@@ -120,15 +120,15 @@ defineProps<{ message: string }>()
 ```jsonc
 {
   "imports": {
-    "deno-inertia":      "jsr:@deno-inertia/core",
-    "deno-inertia/hono": "jsr:@deno-inertia/core/hono",
+    "deno-inertia":      "jsr:@streemkit/inertia-deno",
+    "deno-inertia/hono": "jsr:@streemkit/inertia-deno/hono",
     "hono":              "jsr:@hono/hono@^4"
   },
   "tasks": {
     "install": "npm install",
-    "dev":     "deno run -A jsr:@deno-inertia/cli dev",
-    "build":   "deno run -A jsr:@deno-inertia/cli build",
-    "preview": "deno run -A jsr:@deno-inertia/cli preview"
+    "dev":     "deno run -A jsr:@streemkit/inertia-deno-cli dev",
+    "build":   "deno run -A jsr:@streemkit/inertia-deno-cli build",
+    "preview": "deno run -A jsr:@streemkit/inertia-deno-cli preview"
   },
   "compilerOptions": {
     "lib": ["deno.ns", "dom", "dom.iterable", "esnext"]

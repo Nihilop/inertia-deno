@@ -36,8 +36,8 @@ pour extraire le `Request` du contexte Hono.
 // deno.json
 {
   "imports": {
-    "deno-inertia":      "jsr:@deno-inertia/core",
-    "deno-inertia/hono": "jsr:@deno-inertia/core/hono",
+    "deno-inertia":      "jsr:@streemkit/inertia-deno",
+    "deno-inertia/hono": "jsr:@streemkit/inertia-deno/hono",
     "hono":              "jsr:@hono/hono@^4"
   }
 }
@@ -96,8 +96,8 @@ Oak utilise son propre système de contexte (`Context`) qui abstrait
 // deno.json
 {
   "imports": {
-    "deno-inertia":     "jsr:@deno-inertia/core",
-    "deno-inertia/oak": "jsr:@deno-inertia/core/oak",
+    "deno-inertia":     "jsr:@streemkit/inertia-deno",
+    "deno-inertia/oak": "jsr:@streemkit/inertia-deno/oak",
     "@oak/oak":         "jsr:@oak/oak@^17"
   }
 }
