@@ -108,6 +108,15 @@ const assets = viteProdAssets("src/main.ts", manifest)
 - Generates `modulepreload` for imported JS chunks
 - `base` — asset URL prefix, default `/assets/`
 
+**Loose entry fallback** — If the exact entry key is not found in the manifest,
+`viteProdAssets` attempts to resolve it in order:
+1. Suffix match (e.g. `"main.ts"` matches `"src/app/main.ts"`)
+2. First chunk with `isEntry: true`
+3. Throws if nothing matches
+
+A console warning is logged when an approximate match is used (not an error,
+for better DX).
+
 ### `serveStaticAsset(request, distDir, base?)`
 
 Serves static files from the `dist/` directory with
@@ -133,7 +142,20 @@ Returns `null` if the URL does not start with `base`.
 
 ## Usage in `InertiaConfig`
 
-Use both modes conditionally via the `PROD_MODE` environment variable:
+### Auto mode (recommended)
+
+The `entry` shorthand in `createInertia()` handles dev/prod detection automatically
+— no boilerplate needed. See [configuration.md](./configuration.md#entry--auto-mode-recommended).
+
+```ts
+const inertia = createInertia({
+  entry: "src/main.ts",   // auto dev/prod via PROD_MODE
+  // entry: "src/main.tsx", react: true,  // React
+  template: (page, assets) => `...`,
+})
+```
+
+### Explicit mode
 
 ```ts
 const IS_PROD = Deno.env.get("PROD_MODE") === "1"

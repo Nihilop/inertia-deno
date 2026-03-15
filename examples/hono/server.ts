@@ -2,10 +2,9 @@ import { Hono } from "hono"
 import { createInertia, serveStaticAsset, defer, lazy, merge } from "deno-inertia"
 import { toWebRequest } from "deno-inertia/hono"
 import { parseFormBody, validateForm, successResponse } from "../shared/form_handler.ts"
-import { loadManifest, buildInertiaConfig, IS_PROD, FRONTEND, PORT, distDir } from "../shared/inertia_config.ts"
+import { buildInertiaConfig, IS_PROD, FRONTEND, PORT, distDir } from "../shared/inertia_config.ts"
 
-const manifest = await loadManifest()
-const inertia  = createInertia(buildInertiaConfig(manifest, "Hono"))
+const inertia = createInertia(buildInertiaConfig("Hono"))
 const app      = new Hono()
 
 // ---- Static assets (prod) ----

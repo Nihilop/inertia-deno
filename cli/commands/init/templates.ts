@@ -1,3 +1,5 @@
+import cliMeta from "../../deno.json" with { type: "json" }
+
 export type Router   = "hono" | "oak" | "std"
 export type Frontend = "vue"  | "react"
 
@@ -12,9 +14,11 @@ export interface TemplateOptions {
 // ---------------------------------------------------------------------------
 
 export function denoJson({ router, frontend }: TemplateOptions): string {
+  const v = cliMeta.version
+
   const routerImport: Record<Router, string> = {
-    hono: `    "hono":             "jsr:@hono/hono@^4",\n    "deno-inertia/hono": "jsr:@streemkit/inertia-deno/hono"`,
-    oak:  `    "@oak/oak":         "jsr:@oak/oak@^17",\n    "deno-inertia/oak":  "jsr:@streemkit/inertia-deno/oak"`,
+    hono: `    "hono":             "jsr:@hono/hono@^4",\n    "deno-inertia/hono": "jsr:@streemkit/inertia-deno@^${v}/hono"`,
+    oak:  `    "@oak/oak":         "jsr:@oak/oak@^17",\n    "deno-inertia/oak":  "jsr:@streemkit/inertia-deno@^${v}/oak"`,
     std:  ``,
   }
 
@@ -26,13 +30,13 @@ export function denoJson({ router, frontend }: TemplateOptions): string {
 
   return `{
   "imports": {
-    "deno-inertia": "jsr:@streemkit/inertia-deno"${extra}
+    "deno-inertia": "jsr:@streemkit/inertia-deno@^${v}"${extra}
   },
   "tasks": {
-    "install": "deno run -A jsr:@streemkit/inertia-deno-cli install",
-    "dev":     "deno run -A jsr:@streemkit/inertia-deno-cli dev",
-    "build":   "deno run -A jsr:@streemkit/inertia-deno-cli build",
-    "preview": "deno run -A jsr:@streemkit/inertia-deno-cli preview"
+    "install": "deno run -A jsr:@streemkit/inertia-deno-cli@^${v} install",
+    "dev":     "deno run -A jsr:@streemkit/inertia-deno-cli@^${v} dev",
+    "build":   "deno run -A jsr:@streemkit/inertia-deno-cli@^${v} build",
+    "preview": "deno run -A jsr:@streemkit/inertia-deno-cli@^${v} preview"
   }${compilerOptions}
 }
 `
@@ -107,31 +111,28 @@ export default defineConfig({
 // ---------------------------------------------------------------------------
 
 export function serverTs({ router, frontend }: TemplateOptions): string {
-  const entry    = frontend === "vue" ? "src/main.ts" : "src/main.tsx"
-  const reactOpt = frontend === "react" ? ", react: true" : ""
+  const entry     = frontend === "vue" ? "src/main.ts" : "src/main.tsx"
+  const reactLine = frontend === "react" ? "\n  react: true," : ""
 
   // ---- imports par router ----
   const imports: Record<Router, string> = {
     hono: `import { Hono } from "hono"
-import { createInertia, pageToDiv, readViteManifest, serveStaticAsset } from "deno-inertia"
-import { toWebRequest } from "deno-inertia/hono"`,
+import { createInertia, pageToDiv } from "deno-inertia"
+import { toWebRequest, serveAssets } from "deno-inertia/hono"`,
 
     oak: `import { Application, Router } from "@oak/oak"
-import { createInertia, pageToDiv, readViteManifest, serveStaticAsset } from "deno-inertia"
+import { createInertia, pageToDiv, serveStaticAsset } from "deno-inertia"
 import { toWebRequest, applyResponse } from "deno-inertia/oak"`,
 
-    std: `import { createInertia, createRouter, pageToDiv, readViteManifest, serveStaticAsset } from "deno-inertia"`,
+    std: `import { createInertia, createRouter, pageToDiv, serveStaticAsset } from "deno-inertia"`,
   }
 
   // ---- corps du serveur par router ----
   const body: Record<Router, string> = {
     hono: `const app = new Hono()
 
-if (IS_PROD) {
-  app.get("/assets/*", async (c) => {
-    const res = await serveStaticAsset(c.req.raw, "dist")
-    return res ?? c.notFound()
-  })
+if (Deno.env.get("PROD_MODE") === "1") {
+  app.use("/assets/*", serveAssets("dist"))
 }
 
 app.get("/", (c) =>
@@ -144,7 +145,7 @@ Deno.serve({ port: PORT }, app.fetch)`,
     oak: `const app    = new Application()
 const router = new Router()
 
-if (IS_PROD) {
+if (Deno.env.get("PROD_MODE") === "1") {
   app.use(async (ctx, next) => {
     if (ctx.request.url.pathname.startsWith("/assets/")) {
       const res = await serveStaticAsset(toWebRequest(ctx), "dist")
@@ -171,7 +172,7 @@ router.get("/", (req) =>
 )
 
 async function handler(request: Request): Promise<Response> {
-  if (IS_PROD && new URL(request.url).pathname.startsWith("/assets/")) {
+  if (Deno.env.get("PROD_MODE") === "1" && new URL(request.url).pathname.startsWith("/assets/")) {
     const res = await serveStaticAsset(request, "dist")
     return res ?? new Response("404 Not Found", { status: 404 })
   }
@@ -184,19 +185,11 @@ Deno.serve({ port: PORT }, handler)`,
 
   return `${imports[router]}
 
-const IS_PROD  = Deno.env.get("PROD_MODE") === "1"
-const PORT     = Number(Deno.env.get("PORT")     ?? 3000)
-const VITE_URL = Deno.env.get("VITE_URL")        ?? "http://localhost:5173"
-
-const manifest = IS_PROD
-  ? await readViteManifest("dist/.vite/manifest.json")
-  : null
+const PORT = Number(Deno.env.get("PORT") ?? 3000)
 
 const inertia = createInertia({
   version: "1.0.0",
-  ...(IS_PROD && manifest
-    ? { prod: { manifest, entry: "${entry}" } }
-    : { vite: { url: VITE_URL, entry: "/${entry}"${reactOpt} } }),
+  entry: "${entry}",${reactLine}
   template: (page, assets) => \`<!DOCTYPE html>
 <html lang="fr">
 <head>

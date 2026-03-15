@@ -1,5 +1,5 @@
 import type { InertiaConfig, InertiaInstance, PageData, PageProps, ValidationErrors } from "./types.ts"
-import { viteDevScripts, viteProdAssets } from "./vite.ts"
+import { viteDevScripts, viteProdAssets, resolveViteConfig } from "./vite.ts"
 import { isLazy } from "./lazy.ts"
 import { isDeferred } from "./defer.ts"
 import { isMerged } from "./merge.ts"
@@ -137,7 +137,8 @@ function appendFlashClear(headers: Headers, request: Request, config: InertiaCon
 // Factory principale
 // ---------------------------------------------------------------------------
 
-export function createInertia(config: InertiaConfig): InertiaInstance {
+export function createInertia(rawConfig: InertiaConfig): InertiaInstance {
+  const config = resolveViteConfig(rawConfig)
 
   function resolveVersion(): string | null {
     if (!config.version) return null

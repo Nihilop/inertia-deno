@@ -26,7 +26,7 @@
  * @module
  */
 export { createInertia, pageToDiv, redirect } from "./core.ts"
-export { viteDevScripts, viteProdAssets, readViteManifest, serveStaticAsset } from "./vite.ts"
+export { viteDevScripts, viteProdAssets, readViteManifest, serveStaticAsset, resolveViteConfig } from "./vite.ts"
 export { readFlash, flashCookie, clearFlashCookie } from "./flash.ts"
 export { createRouter } from "./router.ts"
 export { lazy, LazyProp } from "./lazy.ts"

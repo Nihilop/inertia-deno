@@ -202,10 +202,14 @@ The CLI detects the package manager via present lockfiles:
 
 ```bash
 inertia --help      # full help
-inertia --version   # CLI version
+inertia --version   # CLI version (reads actual version from deno.json)
 inertia -h          # alias --help
 inertia -v          # alias --version
 ```
+
+> **Version pinning** — `init` generates a `deno.json` with JSR imports pinned
+> to the CLI's exact version (e.g. `jsr:@streemkit/inertia-deno@^0.1.3`),
+> ensuring reproducible installs.
 
 ---
 

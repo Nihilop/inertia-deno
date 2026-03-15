@@ -74,6 +74,23 @@ Deno.serve({ port: 3000 }, app.fetch)
 > It is provided for symmetry with the Oak adapter and to clarify intent.
 > Both approaches work.
 
+### `serveAssets(distDir, base?)`
+
+Hono middleware that serves compiled Vite assets from `dist/` with
+`Cache-Control: public, max-age=31536000, immutable` (content-hashed filenames).
+
+```ts
+import { serveAssets } from "deno-inertia/hono"
+
+if (Deno.env.get("PROD_MODE") === "1") {
+  app.use("/assets/*", serveAssets("dist"))
+}
+```
+
+- Rejects path traversal (`..`) with 403
+- Automatically detects MIME type from extension
+- `base` — URL prefix to strip, default: `"/assets/"`
+
 ### No `applyResponse`
 
 Unlike Oak, Hono returns `Response` objects directly from its handlers.

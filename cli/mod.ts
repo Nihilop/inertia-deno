@@ -17,9 +17,10 @@ import { build }   from "./commands/build.ts"
 import { preview } from "./commands/preview.ts"
 import { init }    from "./commands/init/index.ts"
 import { detectPM, installCmd } from "./pm.ts"
+import denoJson from "./deno.json" with { type: "json" }
 
 const HELP = `
-deno-inertia — CLI pour @streemkit/inertia-deno
+deno-inertia v${denoJson.version} — CLI pour @streemkit/inertia-deno
 
 Usage:
   inertia <commande> [options]
@@ -61,7 +62,7 @@ const args = parseArgs(Deno.args, {
 })
 
 if (args.version) {
-  console.log("@streemkit/inertia-deno-cli 0.1.0")
+  console.log(`@streemkit/inertia-deno-cli v${denoJson.version}`)
   Deno.exit(0)
 }
 

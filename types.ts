@@ -102,6 +102,30 @@ export interface InertiaConfig {
   prod?: ViteProdConfig
 
   /**
+   * Entry point Vite — raccourci pour la config auto dev/prod.
+   * Lit `PROD_MODE` (env) : "1" → prod (lit le manifest via readTextFileSync),
+   * sinon → dev (HMR via Vite dev server).
+   * Ignoré si `vite` ou `prod` est aussi fourni (rétrocompatibilité totale).
+   *
+   * @example
+   *   createInertia({ entry: "src/main.ts", template: ... })
+   */
+  entry?: string
+
+  /**
+   * Répertoire de build Vite — utilisé uniquement avec `entry`.
+   * Le manifest est cherché à `${distDir}/.vite/manifest.json`.
+   * Défaut: "dist"
+   */
+  distDir?: string
+
+  /**
+   * Injecte le preamble React Refresh — utilisé avec `entry`.
+   * Inutile avec Vue. Identique à `vite.react`.
+   */
+  react?: boolean
+
+  /**
    * Si true, efface automatiquement le cookie flash (__flash) dans chaque
    * réponse render (HTML et JSON). Évite d'appeler clearFlashCookie()
    * manuellement dans chaque middleware/handler.

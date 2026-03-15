@@ -25,9 +25,14 @@ interface InertiaConfig {
   shared?: PropsResolver
   always?: PropsResolver
 
-  // ---- Vite assets ----
-  vite?: ViteDevConfig    // dev mode
-  prod?: ViteProdConfig   // production mode
+  // ---- Vite assets — auto mode (shorthand) ----
+  entry?:   string   // auto dev/prod via PROD_MODE env var
+  distDir?: string   // build output dir, default: "dist"
+  react?:   boolean  // inject React Refresh preamble (React only)
+
+  // ---- Vite assets — explicit mode ----
+  vite?: ViteDevConfig    // dev mode (mutually exclusive with prod)
+  prod?: ViteProdConfig   // production mode (mutually exclusive with vite)
 
   // ---- Behavior ----
   clearFlash?:     boolean
@@ -115,6 +120,35 @@ always: async (request) => ({
 
 ---
 
+## `entry` — auto mode *(recommended)*
+
+The `entry` shorthand eliminates all Vite boilerplate. It reads `PROD_MODE`
+from the environment and automatically picks dev or prod mode:
+
+```ts
+const inertia = createInertia({
+  version: "1.0.0",
+  entry: "src/main.ts",   // Vue
+  // entry: "src/main.tsx", react: true,  // React
+  template: (page, assets) => `...`,
+})
+```
+
+- **Dev** (`PROD_MODE` unset or `"0"`) — equivalent to `vite: { entry, url: VITE_URL }`
+  where `VITE_URL` defaults to `"http://localhost:5173"`
+- **Prod** (`PROD_MODE=1`) — reads `${distDir}/.vite/manifest.json` synchronously
+  at startup; equivalent to `prod: { manifest, entry }`
+
+| Field | Description | Default |
+|---|---|---|
+| `entry` | Vite entry point (e.g. `"src/main.ts"`) | — |
+| `distDir` | Build output directory | `"dist"` |
+| `react` | Inject React Refresh preamble | `false` |
+
+> `vite` and `prod` take precedence — `entry` is ignored if either is set.
+
+---
+
 ## `vite` — development mode
 
 ```ts
@@ -183,14 +217,14 @@ Requires `@inertiajs/vue3@^2` or `@inertiajs/react@^2`.
 
 ## Full example
 
-```ts
-import { createInertia, readViteManifest, pageToDiv, readFlash } from "deno-inertia"
+### Auto mode (recommended)
 
-const IS_PROD = Deno.env.get("PROD_MODE") === "1"
-const manifest = IS_PROD ? await readViteManifest("dist/.vite/manifest.json") : null
+```ts
+import { createInertia, pageToDiv, readFlash } from "deno-inertia"
 
 const inertia = createInertia({
   version: Deno.env.get("APP_VERSION") ?? "dev",
+  entry: "src/main.ts",   // auto dev/prod via PROD_MODE
 
   shared: async (req) => ({
     locale: req.headers.get("Accept-Language")?.slice(0, 2) ?? "en",
@@ -201,12 +235,37 @@ const inertia = createInertia({
     flash: await readFlash(req),
   }),
 
+  clearFlash:     true,
+  encryptHistory: false,
+
+  template: (page, assets) => `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+  ${assets}
+</head>
+<body>${pageToDiv(page)}</body>
+</html>`,
+})
+```
+
+### Explicit mode (full control)
+
+```ts
+import { createInertia, readViteManifest, pageToDiv, readFlash } from "deno-inertia"
+
+const IS_PROD = Deno.env.get("PROD_MODE") === "1"
+const manifest = IS_PROD ? await readViteManifest("dist/.vite/manifest.json") : null
+
+const inertia = createInertia({
+  version: Deno.env.get("APP_VERSION") ?? "dev",
+
   ...(IS_PROD && manifest
     ? { prod: { manifest, entry: "src/main.ts" } }
     : { vite: { entry: "/src/main.ts" } }),
 
-  clearFlash:     true,
-  encryptHistory: false,
+  clearFlash: true,
 
   template: (page, assets) => `<!DOCTYPE html>
 <html lang="en">

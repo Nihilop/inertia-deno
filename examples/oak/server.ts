@@ -2,10 +2,9 @@ import { Application, Router } from "@oak/oak"
 import { createInertia, serveStaticAsset, defer, lazy, merge } from "deno-inertia"
 import { toWebRequest, applyResponse } from "deno-inertia/oak"
 import { parseFormBody, validateForm, successResponse } from "../shared/form_handler.ts"
-import { loadManifest, buildInertiaConfig, IS_PROD, FRONTEND, PORT, distDir } from "../shared/inertia_config.ts"
+import { buildInertiaConfig, IS_PROD, FRONTEND, PORT, distDir } from "../shared/inertia_config.ts"
 
-const manifest = await loadManifest()
-const inertia  = createInertia(buildInertiaConfig(manifest, "Oak"))
+const inertia = createInertia(buildInertiaConfig("Oak"))
 const router   = new Router()
 const app      = new Application()
 

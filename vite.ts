@@ -1,4 +1,4 @@
-import type { ViteDevConfig, ViteManifest } from "./types.ts"
+import type { InertiaConfig, ViteDevConfig, ViteManifest } from "./types.ts"
 
 // Re-export types for convenience
 export type { ViteManifest }
@@ -67,23 +67,57 @@ export async function readViteManifest(manifestPath: string): Promise<ViteManife
  * @param manifest - Manifest parsé via readViteManifest
  * @param base     - Préfixe de chemin public, ex: "/assets/"
  */
+/**
+ * Résout la clé d'entrée dans le manifest Vite.
+ * 1. Correspondance exacte (strip du slash initial)
+ * 2. Correspondance par suffixe parmi les entrypoints (ex: "main.ts" dans "src/app/src/main.ts")
+ * 3. Premier chunk marqué isEntry: true
+ * Logue un avertissement si la résolution est approximative.
+ */
+function resolveManifestEntry(manifest: ViteManifest, entry: string): [string, typeof manifest[string]] {
+  const normalized = entry.replace(/^\//, "")
+
+  // 1. Correspondance exacte
+  if (manifest[normalized]) return [normalized, manifest[normalized]]
+
+  // 2. Correspondance par suffixe (entry key se termine par le chemin demandé)
+  const suffix = Object.entries(manifest).find(
+    ([k, v]) => v.isEntry && k.endsWith(normalized)
+  )
+  if (suffix) {
+    console.warn(
+      `[deno-inertia] Entry "${normalized}" non trouvée exactement — ` +
+      `utilisation de "${suffix[0]}" (correspondance par suffixe).`
+    )
+    return suffix
+  }
+
+  // 3. Premier entrypoint disponible
+  const fallback = Object.entries(manifest).find(([, v]) => v.isEntry)
+  if (fallback) {
+    console.warn(
+      `[deno-inertia] Entry "${normalized}" introuvable — ` +
+      `utilisation de "${fallback[0]}" (premier entrypoint). ` +
+      `Clés disponibles : ${Object.keys(manifest).join(", ")}`
+    )
+    return fallback
+  }
+
+  throw new Error(
+    `[deno-inertia] Entry "${normalized}" introuvable dans le manifest Vite.\n` +
+    `Vérifiez que "entry" dans InertiaConfig.prod correspond à la clé du manifest ` +
+    `(ex: "src/main.ts" sans slash initial).\n` +
+    `Clés disponibles : ${Object.keys(manifest).join(", ")}`
+  )
+}
+
 export function viteProdAssets(
   entry: string,
   manifest: ViteManifest,
   base = "/assets/",
 ): string {
   const normalizedBase = base.endsWith("/") ? base : `${base}/`
-  const key   = entry.replace(/^\//, "")
-  const chunk = manifest[key]
-
-  if (!chunk) {
-    throw new Error(
-      `[deno-inertia] Entry "${key}" introuvable dans le manifest Vite.\n` +
-      `Vérifiez que "entry" dans InertiaConfig.prod correspond à la clé du manifest ` +
-      `(ex: "src/main.ts" sans slash initial).\n` +
-      `Clés disponibles : ${Object.keys(manifest).join(", ")}`
-    )
-  }
+  const [key, chunk]  = resolveManifestEntry(manifest, entry)
 
   const cssFiles  = new Set<string>()
   const jsChunks  = new Set<string>()
@@ -180,6 +214,45 @@ export async function serveStaticAsset(
     })
   } catch {
     return new Response("404 Not Found", { status: 404 })
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Auto-config — résolution dev/prod via env vars
+// ---------------------------------------------------------------------------
+
+/**
+ * Résout la config Vite en mode automatique si `entry` est fourni sans `vite` ni `prod`.
+ * Lit `PROD_MODE` + `VITE_URL` depuis l'environnement. Lit le manifest de façon synchrone.
+ * No-op si `vite` ou `prod` sont déjà définis.
+ *
+ * @example
+ *   createInertia({ entry: "src/main.ts", template: ... })
+ *   // → en dev  : { vite: { entry: "src/main.ts", url: "http://localhost:5173" } }
+ *   // → en prod : { prod: { manifest: ..., entry: "src/main.ts" } }
+ */
+export function resolveViteConfig(config: InertiaConfig): InertiaConfig {
+  if (!config.entry || config.vite || config.prod) return config
+
+  const isProd  = Deno.env.get("PROD_MODE") === "1"
+  const distDir = config.distDir ?? "dist"
+
+  if (isProd) {
+    const manifestPath = `${distDir}/.vite/manifest.json`
+    let text: string
+    try {
+      text = Deno.readTextFileSync(manifestPath)
+    } catch {
+      throw new Error(
+        `[deno-inertia] Manifest Vite introuvable : "${manifestPath}"\n` +
+        `Lancez "deno task build" avant de démarrer en mode production.`
+      )
+    }
+    const manifest = JSON.parse(text) as ViteManifest
+    return { ...config, prod: { manifest, entry: config.entry } }
+  } else {
+    const url = Deno.env.get("VITE_URL") ?? "http://localhost:5173"
+    return { ...config, vite: { entry: config.entry, url, react: config.react } }
   }
 }
 

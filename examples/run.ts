@@ -87,7 +87,7 @@ if (isProd) {
 
 // ---- Spawn serveur Deno (watch en dev seulement) ----
 const useWatch = !isProd
-const serverArgs = ["run", "-A", ...(useWatch ? ["--watch"] : []), `${router}/server.ts`]
+const serverArgs = ["run", "-A", ...(useWatch ? ["--watch"] : []), `./${router}/server.ts`]
 const serverProc = new Deno.Command("deno", {
   args: serverArgs,
   cwd,
